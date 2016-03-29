@@ -1,0 +1,27 @@
+package com.example.jigsaw.view;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.view.View;
+
+public class GameView extends View {
+	
+	private Bitmap background;
+
+	public GameView(Context context) {
+		super(context);
+	}
+	
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+
+		/*
+		 * 计算屏幕的大小，使高宽符合横屏的要求
+		 */
+		int screenW = (w > h) ? w : h;
+		int screenH = (w > h) ? h : w;
+	
+		
+	}
+
+}
