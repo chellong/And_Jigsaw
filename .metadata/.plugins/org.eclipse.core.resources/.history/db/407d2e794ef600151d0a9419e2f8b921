@@ -1,0 +1,5 @@
+package com.example.jigsaw.view;
+
+public class PuzzleCell {
+
+}

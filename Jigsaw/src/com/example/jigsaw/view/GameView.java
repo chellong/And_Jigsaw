@@ -56,12 +56,8 @@ public class GameView extends View {
 		this.paint.setColor(Color.RED);
 		this.paint.setAntiAlias(true);
 		this.paint.setStyle(Paint.Style.STROKE);
+		this.density = getContext().getResources().getDisplayMetrics().density;
 
-	}
-
-	public GameView(Context context, float density) {
-		this(context);
-		this.density = density;
 	}
 
 	@Override
@@ -75,8 +71,16 @@ public class GameView extends View {
 
 		pw = (screenW - dip2px(10) - dip2px(10) - dip2px(10)) / 5.5;
 		ph = (screenH - dip2px(20) - dip2px(20)) / 3.0;
-		
-		puzzRect = new Rect(dip2px(10), dip2px(20), dip2px(10) + (int)(4*pw), (int)(3*ph));
+
+		puzzRect = new Rect(dip2px(10), dip2px(20),
+				dip2px(10) + (int) (4 * pw), (int) (3 * ph));
+
+		this.thumRect = new Rect(dip2px(10) + (int) (4 * pw) + dip2px(10),
+				dip2px(20), screenW - dip2px(10), (int) (dip2px(20) + ph));
+
+		this.cellRect = new Rect(dip2px(10) + (int) (4 * pw) + dip2px(10),
+				(int) (dip2px(20) + ph + dip2px(5)), (int) (screenW
+						- dip2px(10) - pw), (int) (screenH - dip2px(20) - ph));
 		/*
 		 * 加载背景图片，按屏幕大小缩放成一张
 		 */
@@ -84,15 +88,57 @@ public class GameView extends View {
 				R.drawable.wallpaper);
 
 		background = Bitmap.createScaledBitmap(bg, screenW, screenH, false);
+		bg.recycle();
+
+		Bitmap pic = BitmapFactory.decodeResource(getResources(),
+				R.drawable.pic02);
 
 		bg.recycle();
+
+		puzzImage = Bitmap.createScaledBitmap(pic, puzzRect.width(),
+				puzzRect.height(), false);
+		pic.recycle();
 
 		super.onSizeChanged(screenW, screenH, oldw, oldh);
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+
 		canvas.drawBitmap(background, 0, 0, null);
+
+		int alpha = paint.getAlpha();
+		paint.setAlpha(120);
+
+		canvas.drawBitmap(puzzImage, null, puzzRect, paint);
+		/*
+		 * 平图区边框
+		 */
+		canvas.drawRect(cellRect, paint);
+		paint.setAlpha(alpha);
+	
+		/*
+		 * 绘制水平格子线
+		 */
+		canvas.drawLine(puzzRect.left, (int) ph + puzzRect.top,
+				puzzRect.right, (int) ph + puzzRect.top, paint);
+		canvas.drawLine(puzzRect.left, (int) (ph * 2) + puzzRect.top,
+				puzzRect.right, (int) (ph * 2) + puzzRect.top, paint);
+		
+		/*
+		 * 绘制垂直格子线
+		 */
+		canvas.drawLine( (int) (pw * 1) + puzzRect.left,
+				puzzRect.top,(int)(pw * 1) + puzzRect.left,puzzRect.bottom, paint);
+		canvas.drawLine( (int) (pw * 2) + puzzRect.left,
+				puzzRect.top,(int)(pw * 2) + puzzRect.left,puzzRect.bottom, paint);
+		canvas.drawLine( (int) (pw * 3) + puzzRect.left,
+				puzzRect.top,(int)(pw * 3) + puzzRect.left,puzzRect.bottom, paint);
+		
+		/*
+		 * 绘制缩略图
+		 */
+		canvas.drawBitmap(puzzImage, null, thumRect, paint);
 	}
 
 	private int dip2px(float dip) {

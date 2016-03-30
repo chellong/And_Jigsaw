@@ -2,7 +2,6 @@ package com.example.jigsaw;
 
 import com.example.jigsaw.view.GameView;
 
-import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 import android.app.Activity;
@@ -29,12 +28,6 @@ public class GameActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		/*
-		 * 获取当前屏幕的屏幕密度 
-		 */
-		DisplayMetrics metric = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metric);
-		float density = metric.density;
-		/*
 		 *  隐去程序标题栏
 		 */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -43,7 +36,7 @@ public class GameActivity extends Activity {
 		 * 加载游戏进度给gameview
 		 */
 		
-		mView = new GameView(this,density);
+		mView = new GameView(this);
 		loadGameProgress();
 		setContentView(mView);
 	}
